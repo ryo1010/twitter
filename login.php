@@ -29,9 +29,9 @@
 				while ($stmt->fetch()) {
     				$_SESSION['username'] = $usr_id;
     			}
-				
 			}
 		}
+
 		$stmt->close();
 		header('Location: /');
 		exit();

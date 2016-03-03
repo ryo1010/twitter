@@ -1,3 +1,26 @@
 p{
-	padding: 0;
+	margin: 0;
+	padding:0;
+}
+body{
+	background-color: #F5F5F5;
+}
+.main{
+	font-size: 20px;
+	font-weight: bold;
+	width: 800px;
+	background-color: #fff;
+	margin-left: auto ;
+	margin-right: auto ;
+}
+.datetime{
+	width: 150px;
+	float:right;
+}
+.usr_id_div{
+	width: 150px;
+	float:left;
+}
+.content_div{
+	clear:both;
 }
