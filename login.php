@@ -6,7 +6,7 @@
 <body>
 <?php
 	require_once("twitter_function.php");
-	$link = con();
+	
 	session_start();
 	//ログイン済み処理
 	if(isset($_SESSION['username'])){
@@ -16,9 +16,8 @@
 
 	//入力されていたらユーザーがいるか確認	
 	}elseif (!empty($_POST['mail_address']) && ($_POST['password'])) {
-	
+		$link = con();
 		$mail_address = $_POST['mail_address'];
-		//暗号化させる？
 		$password = $_POST['password'];
 		if ($stmt = $link->prepare("SELECT * FROM users WHERE usr_mail = ? AND usr_pw = ?")) {
 			$stmt->bind_param("ss",$mail_address,$password);

@@ -10,11 +10,16 @@
 	require_once("twitter_function.php");
 	login_check();
 	echo "<div class='username_div'>ユーザ名".$_SESSION['username']."</div>";
-	//ツイートと一覧表示
+	
 	?>
 	<a href="tweet.php">つぶやく</a>
 	<div class="main">
-		<?php echo display(); ?>
+
+		<?php 
+		//ツイートと一覧表示
+		echo display();
+		 ?>
+
 	</div>
 </body>
 </html>
