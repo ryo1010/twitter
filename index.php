@@ -5,14 +5,13 @@
     <title>Twitterもどき</title>
 </head>
 <body>
-    <h1 class="title">Tweet一覧</h1>
     <?
         require_once('twitter_function.php');
         require_once('classes/twitter_display.php');
         login_check();
-        echo "<div class='username_div'>ユーザ名".$_SESSION['username']."</div>";
     ?>
-
+    <h1 class="title">Tweet一覧</h1>
+    <div class='username_div'>ユーザ名<?= $_SESSION['username'] ?></div>
     <a href="tweet.php">つぶやく</a>
     <a href="tweet_history.php">削除履歴</a>
     <div class="main">

@@ -21,7 +21,7 @@ function login_check()
 {
     session_start();
     if (!isset($_SESSION['username'])) {
-        header("location:login.php");
+        include  'login.php';
         exit();
     } elseif (isset($_SESSION['username'])) {
         return true;
@@ -53,21 +53,7 @@ function tweet_submit()
     }
 }
 
-function tweet_diff_check($tweettime)
-{
-    $now_datetime = date("Y-m-d H:i");
-    $tweettime_diff = (strtotime($now_datetime) - strtotime($tweettime));
-    if ($tweettime_diff < 60) {
-        $tweettime_diff = "今さっき";
-    } elseif ($tweettime_diff < 3600) {
-        $tweettime_diff = (floor($tweettime_diff / 60 )) . "分前";
-    } elseif ($tweettime_diff < 86400) {
-            $tweettime_diff = (floor($tweettime_diff / 3600 )) . "時間前";
-    } elseif ($tweettime_diff > 86400) {
-        $tweettime_diff = date("m月d日",strtotime($tweettime));
-    }
-    return $tweettime_diff;
-}
+
 
 
 function tweet_edit()
