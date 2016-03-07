@@ -24,8 +24,8 @@ function login_check(){
 //ツイート表示
 function display(){
 	$link = con();
-			//stutasが0のものを表示1は削除されたものとしています
-	if($result = $link->query("SELECT * FROM tweet WHERE stutas = 0 OR stutas = 2 ORDER BY tweettime DESC")){
+			//statusが0のものを表示1は削除されたものとしています
+	if($result = $link->query("SELECT * FROM tweet WHERE status = 0 OR status = 2 ORDER BY tweettime DESC")){
 		//$data = "";
 		while ($row = $result->fetch_assoc()) {
 			$data .= "<div class='tweet_div'>\n";
@@ -90,11 +90,11 @@ function tweet_edit(){
 		$tweet_id = $_GET['tweet_id'];
 		$link = con();
 		if ($stmt = $link->prepare("SELECT * FROM tweet WHERE id = ? AND usr_id = ?")) {
-			$stmt->bind_param("is",$tweet_id,$_SESSION['username']);
+			$stmt->bind_param('is',$tweet_id,$_SESSION['username']);
 			$stmt->execute();
 			$stmt->store_result();
 			if($stmt->num_rows == 1){
-				$stmt->bind_result($id,$usr_id,$tweettime,$content,$stutas);
+				$stmt->bind_result($id,$usr_id,$tweettime,$content,$status);
 				$stmt->fetch();
 				$data .= "<table border='0'>";
 				$data .= "<tr><td>".$usr_id."</tr></td>";
@@ -118,10 +118,10 @@ function tweet_edit_submit(){
 			}
 			
 			$link = con();
-			$stutas = 2;
+			$status = 2;
 			$now_date = date("Y-m-d H:i:s");
-			if ( $stmt = $link->prepare("UPDATE tweet SET content = ?, tweettime = ?, stutas = ? WHERE id = ? AND usr_id = ?")) {
-				$stmt->bind_param("ssiis",$_POST['tweet_content'],$now_date,$stutas,$tweet_id,$_SESSION['username']);
+			if ( $stmt = $link->prepare("UPDATE tweet SET content = ?, tweettime = ?, status = ? WHERE id = ? AND usr_id = ?")) {
+				$stmt->bind_param("ssiis",$_POST['tweet_content'],$now_date,$status,$tweet_id,$_SESSION['username']);
 				$stmt->execute();
 			}
 			$stmt->close();
@@ -139,9 +139,9 @@ function tweet_delete(){
 		}
 
 		$link = con();
-		$stutas = 1;
-		if ( $stmt = $link->prepare("UPDATE tweet SET stutas = ? WHERE id = ? AND usr_id = ?")) {
-			$stmt->bind_param("iis",$stutas,$tweet_id,$_SESSION['username']);
+		$status = 1;
+		if ( $stmt = $link->prepare("UPDATE tweet SET status = ? WHERE id = ? AND usr_id = ?")) {
+			$stmt->bind_param("iis",$status,$tweet_id,$_SESSION['username']);
 			$stmt->execute();
 		}
 		$stmt->close();
@@ -149,6 +149,28 @@ function tweet_delete(){
 		header("Location: /");
 		exit();
 	}
+}
+
+//ツイートの削除履歴を閲覧できるように
+function tweet_history(){
+	$link = con();
+	$status = 1;
+	if ($stmt = $link->prepare("SELECT * FROM tweet WHERE usr_id = ? AND status = ? ORDER BY tweettime DESC")) {
+		$stmt->bind_param('ii',$_SESSION['username'],$status);
+	
+		$stmt->execute();
+		$stmt->store_result();
+		$stmt->bind_result($id,$usr_id,$tweettime,$content,$status);
+		while ($stmt->fetch() ) {
+			$tweettime = date("Y年m月d日 h時i分" ,strtotime($tweettime));
+			$data .= "<div class='tweet_div'>\n";
+			$data .= "<div class='datetime_div'>".$tweettime."</div>\n";
+			$data .= "<div class='usr_id_div'>".$usr_id."</div>\n";
+			$data .= "<div class='content_div'>".$content."</div>\n";
+			$data .= "</div>\n";
+		}
+	}
+	return $data;
 }
 
 ?>

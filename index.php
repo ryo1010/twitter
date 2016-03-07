@@ -13,6 +13,7 @@
 	
 	?>
 	<a href="tweet.php">つぶやく</a>
+	<a href="tweet_history.php">削除履歴</a>
 	<div class="main">
 
 		<?php 

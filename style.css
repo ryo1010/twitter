@@ -39,5 +39,6 @@ textarea{
 /*tweet content*/
 .content_div{
 	font-size: 18px;
+	padding-top: 3px;
 	clear:both;
 }
