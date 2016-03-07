@@ -12,11 +12,11 @@ DB
 
 tweet
 id usr_id tweettime content status
-							デフォで0
+                            デフォで0
  CREATE TABLE tweet (id int not null primary key auto_increment,usr_id varchar(30),tweettime datetime ,content varchar(255) ,stutas int(1) default 0);
 
 users
-id usr_id usr_pw usr_mail 
+id usr_id usr_pw usr_mail
 CREATE TABLE users (id int not null primary key auto_increment,usr_id varchar(30),usr_pw varchar(30) ,usr_mail varchar(50));
 
 ↓いらない子
