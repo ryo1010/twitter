@@ -25,7 +25,7 @@ function login_check(){
 function display(){
 	$link = con();
 			//stutasが0のものを表示1は削除されたものとしています
-	if($result = $link->query("SELECT * FROM tweet WHERE stutas = 0 ORDER BY tweettime DESC")){
+	if($result = $link->query("SELECT * FROM tweet WHERE stutas = 0 OR stutas = 2 ORDER BY tweettime DESC")){
 		//$data = "";
 		while ($row = $result->fetch_assoc()) {
 			$data .= "<div class='tweet_div'>\n";
@@ -89,17 +89,19 @@ function tweet_edit(){
 	if (isset($_GET['tweet_id'])) {
 		$tweet_id = $_GET['tweet_id'];
 		$link = con();
-		if ($stmt = $link->prepare("SELECT * FROM tweet WHERE id = ? ")) {
-			$stmt->bind_param("i",$tweet_id);
+		if ($stmt = $link->prepare("SELECT * FROM tweet WHERE id = ? AND usr_id = ?")) {
+			$stmt->bind_param("is",$tweet_id,$_SESSION['username']);
 			$stmt->execute();
 			$stmt->store_result();
 			if($stmt->num_rows == 1){
 				$stmt->bind_result($id,$usr_id,$tweettime,$content,$stutas);
 				$stmt->fetch();
-				$data .= "<div class='usr_id'>".$usr_id."</div>";
-				$data .= "<div class='tweettime'>".$tweettime."</div>";
-				$data .= "<div class='content'><TEXTAREA name='tweet_content' cols='40' rows='5'>".$content."</TEXTAREA></div>";
-				$data .= "<input type='hidden' name='tweet_id' values='".$tweet_id."'>";
+				$data .= "<table border='0'>";
+				$data .= "<tr><td>".$usr_id."</tr></td>";
+				$data .= "<tr><td>".$tweettime."</tr></td>";
+				$data .= "<tr><td><TEXTAREA name='tweet_content' cols='40' rows='5'>".$content."</TEXTAREA></tr></td>";
+				$data .= "<tr><td><input type='hidden' name='tweet_id' values='".$tweet_id."'></tr></td>";
+				$data .= "</table>";
 			}else{
 				$data = "取得できませんでした。";
 			}
@@ -107,4 +109,46 @@ function tweet_edit(){
 	}
 	return $data;
 }
+//ツイート編集が押されたとき
+function tweet_edit_submit(){
+	if (isset($_POST['tweet_edit'])) {
+		if (isset($_POST['tweet_content'])) {
+			if (isset($_GET['tweet_id'])) {
+				$tweet_id = $_GET['tweet_id'];
+			}
+			
+			$link = con();
+			$stutas = 2;
+			$now_date = date("Y-m-d H:i:s");
+			if ( $stmt = $link->prepare("UPDATE tweet SET content = ?, tweettime = ?, stutas = ? WHERE id = ? AND usr_id = ?")) {
+				$stmt->bind_param("ssiis",$_POST['tweet_content'],$now_date,$stutas,$tweet_id,$_SESSION['username']);
+				$stmt->execute();
+			}
+			$stmt->close();
+			$link->close();
+			header("Location: /");
+			exit();
+		}
+	}
+}
+//ツイート削除ボタンが押されたとき
+function tweet_delete(){
+	if (isset($_POST['tweet_delete'])) {
+		if (isset($_GET['tweet_id'])) {
+			$tweet_id = $_GET['tweet_id'];
+		}
+
+		$link = con();
+		$stutas = 1;
+		if ( $stmt = $link->prepare("UPDATE tweet SET stutas = ? WHERE id = ? AND usr_id = ?")) {
+			$stmt->bind_param("iis",$stutas,$tweet_id,$_SESSION['username']);
+			$stmt->execute();
+		}
+		$stmt->close();
+		$link->close();
+		header("Location: /");
+		exit();
+	}
+}
+
 ?>

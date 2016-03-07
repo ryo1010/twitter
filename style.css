@@ -6,6 +6,9 @@ p{
 body{
 	background-color: #F5F5F5;
 }
+textarea{
+	resize: none;
+}
 .main{
 	font-weight: normal;
 	width: 600px;
