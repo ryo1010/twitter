@@ -9,13 +9,14 @@
     <?
         require_once("classes/twitter_login.php");
         require_once('classes/twitter_database.php');
-        $database = new database();
-        $login = new login();
+        $database = new Database();
+        $login = new Login();
         $login->login_check();
+        if (isset($_POST['tweet_edit'])) {
+            $database->tweet_edit_submit($_POST['tweet_id'],$_POST['tweet_content']);
+        }
 
-        $database->tweet_edit_submit($_POST['tweet_id'],$_POST['tweet_content']);
         $database->tweet_delete();
-
         $rows = $database->tweet_edit($_GET['tweet_id']);
     ?>
     <table border='0'>

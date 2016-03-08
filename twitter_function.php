@@ -1,5 +1,5 @@
 <?php
-class login
+class Login
 {
     function login_check()
     {

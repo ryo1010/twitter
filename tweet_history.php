@@ -9,14 +9,14 @@
     require_once("classes/twitter_login.php");
     require_once('classes/twitter_database.php');
 
-    $login = new login();
+    $login = new Login();
     $login->login_check();
 ?>
 <a href="/">もどる</a>
 
 <div class="main">
 
-    <? $database = new database(); ?>
+    <? $database = new Database(); ?>
     <? $tweet_history_rows = $database->tweet_history(); ?>
         <? foreach ($tweet_history_rows as $row) { ?>
             <div class='datetime_div'>

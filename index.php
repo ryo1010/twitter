@@ -8,15 +8,16 @@
     <?
         require_once('classes/twitter_login.php');
         require_once('classes/twitter_database.php');
-        $login = new login();
+        $login = new Login();
         $login->login_check();
+
     ?>
     <h1 class="title">Tweet一覧</h1>
     <div class='username_div'>ユーザ名<?= $_SESSION['username'] ?></div>
     <a href="tweet.php">つぶやく</a>
     <a href="tweet_history.php">削除履歴</a>
     <div class="main">
-        <? $database = new database() ?>
+        <? $database = new Database() ?>
         <? $array_data = $database->tweet_display(); ?>
         <? foreach ($array_data as $data) { ?>
             <div class='datetime_div'>

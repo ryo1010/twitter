@@ -7,7 +7,7 @@
 <?php
     require_once("classes/twitter_login.php");
     require_once('classes/twitter_database.php');
-    $database = new database();
+    $database = new Database();
     session_start();
     if (isset($_SESSION['username'])) {
         header('Location: /');

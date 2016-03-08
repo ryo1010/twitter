@@ -1,11 +1,13 @@
 <?
 
-class database
+class Database
 {
     private $address = '192.168.56.123';
     private $db_user_name = 'akahira';
     private $db_pass = 'akahira';
     private $db_name = 'twitter';
+
+    
 
     protected function db_connect()
     {
@@ -30,7 +32,8 @@ class database
         $INSERTED = 0;
         $EDIT = 2;
         if ($result = $link->query(
-            "SELECT * FROM tweet WHERE status = $INSERTED OR status = $EDIT ORDER BY tweettime DESC"
+            "SELECT * FROM tweet WHERE status = $INSERTED OR
+             status = $EDIT ORDER BY tweettime DESC"
         )){
             $data = "";
             while ( $row = $result->fetch_array() ) {
@@ -46,7 +49,9 @@ class database
     private function tweet_diff_check($tweettime)
     {
         $now_datetime = date("Y-m-d H:i");
-        $tweettime_diff = (strtotime($now_datetime) - strtotime($tweettime));
+        $tweettime_diff =
+        (strtotime($now_datetime) - strtotime($tweettime));
+
         if ($tweettime_diff < 60) {
             $tweettime_diff = "今さっき";
         } elseif ($tweettime_diff < 3600) {
@@ -62,7 +67,9 @@ class database
     {
         $data = "";
         $link = $this->db_connect();
-        if ($stmt = $link->prepare("SELECT * FROM tweet WHERE id = ? AND usr_id = ?")) {
+        if ($stmt = $link->prepare(
+            "SELECT * FROM tweet WHERE id = ? AND usr_id = ?"
+        )) {
             $stmt->bind_param('is',$tweet_id,$_SESSION['username']);
             $stmt->execute();
             $stmt->store_result();
@@ -88,7 +95,8 @@ class database
     $link = $this->db_connect();
     $TWEET_HISTORY = 1;
     if ($stmt = $link->prepare(
-        "SELECT * FROM tweet WHERE usr_id = ? AND status = $TWEET_HISTORY ORDER BY tweettime DESC"
+        "SELECT * FROM tweet WHERE usr_id = ? AND
+        status = $TWEET_HISTORY ORDER BY tweettime DESC"
     )) {
         $stmt->bind_param('i',$_SESSION['username']);
         $stmt->execute();

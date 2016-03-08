@@ -9,10 +9,10 @@
     require_once("classes/twitter_login.php");
     require_once('classes/twitter_database.php');
 
-    $login = new login();
+    $login = new Login();
     $login->login_check();
 
-    $database = new database();
+    $database = new Database();
     $database->tweet_submit();
 ?>
 <form action="" method="POST">
