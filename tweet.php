@@ -12,7 +12,8 @@
     );
     $database->setDb_con_info($db_con_info);
     if (isset($_POST['tweet_button'])) {
-        $database->tweet_submit($_POST['tweet_content'],$_SESSION['username']);
+        $database->
+        tweet_submit($_POST['tweet_content'],$_SESSION['username']);
     }
 
     include 'template/tweet_tmp.php'

@@ -13,7 +13,9 @@
     if (isset($_SESSION['username'])) {
         header('Location: /');
         exit();
-    } elseif (!empty($_POST['mail_address']) && !empty($_POST['password'])) {
+    } elseif (!empty($_POST['mail_address']) &&
+        !empty($_POST['password']
+    )) {
         $database->login();
     }
     include 'template/login_tmp.php';
