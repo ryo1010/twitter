@@ -6,11 +6,14 @@
 </head>
 <body>
 <?php
-    require_once("twitter_function.php");
-    //ログインチェック
-    login_check();
-    //ツイート送信
-    tweet_submit();
+    require_once("classes/twitter_function.php");
+    require_once('classes/twitter_display.php');
+
+    $login = new login();
+    $login->login_check();
+
+    $twitter = new twitter();
+    $twitter->tweet_submit();
 ?>
 <form action="" method="POST">
     <table>

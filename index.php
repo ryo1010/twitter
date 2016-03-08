@@ -6,9 +6,10 @@
 </head>
 <body>
     <?
-        require_once('twitter_function.php');
+        require_once('classes/twitter_function.php');
         require_once('classes/twitter_display.php');
-        login_check();
+        $login = new login();
+        $login->login_check();
     ?>
     <h1 class="title">Tweet一覧</h1>
     <div class='username_div'>ユーザ名<?= $_SESSION['username'] ?></div>

@@ -5,15 +5,30 @@
     <title>ツイート削除履歴</title>
 </head>
 <body>
-<?php
-    require_once("twitter_function.php");
+<?
+    require_once("classes/twitter_function.php");
+    require_once('classes/twitter_display.php');
 
-    login_check();
+    $login = new login();
+    $login->login_check();
 ?>
 <a href="/">もどる</a>
 
 <div class="main">
-    <?php echo tweet_history(); ?>
+
+    <? $twitter = new twitter(); ?>
+    <? $tweet_history_rows = $twitter->tweet_history(); ?>
+        <? foreach ($tweet_history_rows as $row) { ?>
+            <div class='datetime_div'>
+                <?= $row['tweettime'] ?>
+            </div>
+            <div class='usr_id_div'>
+                <?= $row['usr_id'] ?>
+            </div>
+            <div class='content_div'>
+                <?= $row['content'] ?>
+            </div>
+        <? } ?>
 </div>
 </body>
 </html>

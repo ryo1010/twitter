@@ -5,15 +5,16 @@
 </head>
 <body>
 <?php
-    require_once("twitter_function.php");
-
+    require_once("classes/twitter_function.php");
+    require_once('classes/twitter_display.php');
+    $twitter = new twitter();
     session_start();
     if (isset($_SESSION['username'])) {
         header('Location: /');
         exit();
 
     } elseif (!empty($_POST['mail_address']) && !empty($_POST['password'])) {
-        $link = db_connect('192.168.56.123','akahira','akahira','twitter');
+        $link = $twitter->db_connect('192.168.56.123','akahira','akahira','twitter');
         $mail_address = $_POST['mail_address'];
         $password = $_POST['password'];
         if ($stmt = $link->prepare(
