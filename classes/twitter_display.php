@@ -1,6 +1,6 @@
 <?
 
-class twitter
+class database
 {
     public function db_connect($address,$db_user_name,$db_pass,$db_name)
     {

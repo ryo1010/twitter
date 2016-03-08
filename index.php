@@ -16,8 +16,8 @@
     <a href="tweet.php">つぶやく</a>
     <a href="tweet_history.php">削除履歴</a>
     <div class="main">
-        <? $twitter = new twitter() ?>
-        <? $array_data = $twitter->tweet_display(); ?>
+        <? $database = new database() ?>
+        <? $array_data = $database->tweet_display(); ?>
         <? foreach ($array_data as $data) { ?>
             <div class='datetime_div'>
                 <?= $data['tweettime'] ?>

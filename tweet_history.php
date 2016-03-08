@@ -16,8 +16,8 @@
 
 <div class="main">
 
-    <? $twitter = new twitter(); ?>
-    <? $tweet_history_rows = $twitter->tweet_history(); ?>
+    <? $database = new database(); ?>
+    <? $tweet_history_rows = $database->tweet_history(); ?>
         <? foreach ($tweet_history_rows as $row) { ?>
             <div class='datetime_div'>
                 <?= $row['tweettime'] ?>
