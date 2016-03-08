@@ -2,13 +2,18 @@
 
 class database
 {
-    public function db_connect($address,$db_user_name,$db_pass,$db_name)
+    private $address = '192.168.56.123';
+    private $db_user_name = 'akahira';
+    private $db_pass = 'akahira';
+    private $db_name = 'twitter';
+
+    protected function db_connect()
     {
         $link = new mysqli(
-                $address,
-                $db_user_name,
-                $db_pass,
-                $db_name
+                $this->address,
+                $this->db_user_name,
+                $this->db_pass,
+                $this->db_name
                 );
         if ($link->connect_error) {
             echo $link->connect_error;
@@ -21,12 +26,7 @@ class database
 
     public function tweet_display()
     {
-        $link = $this->db_connect(
-                '192.168.56.123',
-                'akahira',
-                'akahira',
-                'twitter'
-        );
+        $link = $this->db_connect();
         $INSERTED = 0;
         $EDIT = 2;
         if ($result = $link->query(
@@ -61,12 +61,7 @@ class database
     public function tweet_edit($tweet_id)
     {
         $data = "";
-                $link = $this->db_connect(
-                '192.168.56.123',
-                'akahira',
-                'akahira',
-                'twitter'
-        );
+        $link = $this->db_connect();
         if ($stmt = $link->prepare("SELECT * FROM tweet WHERE id = ? AND usr_id = ?")) {
             $stmt->bind_param('is',$tweet_id,$_SESSION['username']);
             $stmt->execute();
@@ -90,12 +85,7 @@ class database
 
     public function tweet_history()
     {
-    $link = $this->db_connect(
-        '192.168.56.123',
-        'akahira',
-        'akahira',
-        'twitter'
-    );
+    $link = $this->db_connect();
     $TWEET_HISTORY = 1;
     if ($stmt = $link->prepare(
         "SELECT * FROM tweet WHERE usr_id = ? AND status = $TWEET_HISTORY ORDER BY tweettime DESC"
@@ -120,12 +110,7 @@ class database
     {
         if (isset($_POST['tweet_edit'])) {
             $tweet_id = $_GET['tweet_id'];
-            $link = $this->db_connect(
-                '192.168.56.123',
-                'akahira',
-                'akahira',
-                'twitter'
-            );
+            $link = $this->db_connect();
             $EDIT = 2;
             $now_date = date("Y-m-d H:i:s");
             if ( $stmt = $link->prepare(
@@ -153,12 +138,7 @@ class database
         if (isset($_POST['tweet_button'])
             && !empty($_POST['tweet_content'])
         ) {
-            $link = $this->db_connect(
-                    '192.168.56.123',
-                    'akahira',
-                    'akahira',
-                    'twitter'
-                    );
+            $link = $this->db_connect();
             $now_date = date("Y-m-d H:i:s");
             if ( $stmt = $link->prepare("
                          INSERT INTO tweet VALUES(NULL,?,?,?,0)"
@@ -180,12 +160,7 @@ class database
             && isset($_GET['tweet_id'])) {
 
             $tweet_id = $_GET['tweet_id'];
-            $link = $this->db_connect(
-                '192.168.56.123',
-                'akahira',
-                'akahira',
-                'twitter'
-            );
+            $link = $this->db_connect();
             $status = 1;
             if ( $stmt = $link->prepare(
                 "UPDATE tweet SET status = ? WHERE id = ? AND usr_id = ?"

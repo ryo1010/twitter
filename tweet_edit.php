@@ -8,7 +8,7 @@
 <form action="" method="POST">
     <?
         require_once("classes/twitter_login.php");
-        require_once('classes/twitter_display.php');
+        require_once('classes/twitter_database.php');
         $database = new database();
         $login = new login();
         $login->login_check();

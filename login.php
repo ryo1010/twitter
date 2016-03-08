@@ -6,7 +6,7 @@
 <body>
 <?php
     require_once("classes/twitter_login.php");
-    require_once('classes/twitter_display.php');
+    require_once('classes/twitter_database.php');
     $database = new database();
     session_start();
     if (isset($_SESSION['username'])) {

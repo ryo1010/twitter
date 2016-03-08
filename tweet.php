@@ -7,7 +7,7 @@
 <body>
 <?php
     require_once("classes/twitter_login.php");
-    require_once('classes/twitter_display.php');
+    require_once('classes/twitter_database.php');
 
     $login = new login();
     $login->login_check();
