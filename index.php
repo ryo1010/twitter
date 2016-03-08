@@ -12,7 +12,6 @@
     );
     $database->setDb_con_info($db_con_info);
 
-    $_SERVER['REQUEST_URI'];
 
     include 'template/index_tmp.php';
 ?>

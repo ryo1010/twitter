@@ -8,14 +8,14 @@ class Database
         self::$db_con_info = $db_con_info;
     }
 
-    protected function db_connect()
+    private function db_connect()
     {
         $link = new mysqli(
                 self::$db_con_info['host'],
                 self::$db_con_info['dbuser'],
                 self::$db_con_info['password'],
                 self::$db_con_info['dbname']
-                );
+        );
         if ($link->connect_error) {
             echo $link->connect_error;
             exit();
@@ -90,14 +90,14 @@ class Database
         }
         return $tweettime_diff;
     }
-    public function tweet_edit($tweet_id)
+    public function tweet_edit($tweet_id,$username)
     {
         $data = "";
         $link = $this->db_connect();
         if ($stmt = $link->prepare(
             "SELECT * FROM tweet WHERE id = ? AND usr_id = ?"
         )) {
-            $stmt->bind_param('is',$tweet_id,$_SESSION['username']);
+            $stmt->bind_param('is',$tweet_id,$username);
             $stmt->execute();
             $stmt->store_result();
             if ($stmt->num_rows == 1) {
@@ -117,7 +117,7 @@ class Database
     return $rows;
     }
 
-    public function tweet_history()
+    public function tweet_history($username)
     {
     $link = $this->db_connect();
     $TWEET_HISTORY = 1;
@@ -125,7 +125,7 @@ class Database
         "SELECT * FROM tweet WHERE usr_id = ? AND
         status = $TWEET_HISTORY ORDER BY tweettime DESC"
     )) {
-        $stmt->bind_param('i',$_SESSION['username']);
+        $stmt->bind_param('i',$username);
         $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result($id,$usr_id,$tweettime,$content,$status);
@@ -143,72 +143,63 @@ class Database
 
     public function tweet_edit_submit($tweet_id,$tweet_content)
     {
-        if (isset($_POST['tweet_edit'])) {
-            $tweet_id = $_GET['tweet_id'];
-            $link = $this->db_connect();
-            $EDIT = 2;
-            $now_date = date("Y-m-d H:i:s");
-            if ( $stmt = $link->prepare(
-                "UPDATE tweet SET content = ?, tweettime = ?, status = $EDIT
-                 WHERE id = ? AND usr_id = ?"
-            )) {
-            $stmt->bind_param(
-                "ssis",
-                $tweet_content,
-                $now_date,
-                $tweet_id,
-                $_SESSION['username']
-            );
+        $link = $this->db_connect();
+        $EDIT = 2;
+        $now_date = date("Y-m-d H:i:s");
+        if ( $stmt = $link->prepare(
+            "UPDATE tweet SET content = ?, tweettime = ?, status = $EDIT
+             WHERE id = ? AND usr_id = ?"
+        )) {
+        $stmt->bind_param(
+            "ssis",
+            $tweet_content,
+            $now_date,
+            $tweet_id,
+            $_SESSION['username']
+        );
         $stmt->execute();
         }
         $stmt->close();
         $link->close();
         header("Location: /");
         exit();
-        }
     }
 
-    public function tweet_submit()
+    public function tweet_submit($tweet_content,$username)
     {
-        if (isset($_POST['tweet_button'])
-            && !empty($_POST['tweet_content'])
-        ) {
-            $link = $this->db_connect();
-            $now_date = date("Y-m-d H:i:s");
-            if ( $stmt = $link->prepare("
-                         INSERT INTO tweet VALUES(NULL,?,?,?,0)"
-                         )) {
-                $stmt->bind_param("sss",
-                $_SESSION['username'],$now_date,$_POST['tweet_content']);
-                $stmt->execute();
-            }
-            $stmt->close();
-            $link->close();
-            header("Location: /");
-            exit();
+        $link = $this->db_connect();
+        $now_date = date("Y-m-d H:i:s");
+        if ( $stmt = $link->prepare("
+            INSERT INTO tweet VALUES(NULL,?,?,?,0)"
+        )) {
+            $stmt->bind_param(
+                "sss",
+                $username,
+                $now_date,
+                $tweet_content
+            );
+            $stmt->execute();
         }
+        $stmt->close();
+        $link->close();
+        header("Location: /");
+        exit();
     }
 
-    public function tweet_delete()
+    public function tweet_delete($tweet_id,$username)
     {
-        if (isset($_POST['tweet_delete'])
-            && isset($_GET['tweet_id'])
-        ) {
-
-            $tweet_id = $_GET['tweet_id'];
-            $link = $this->db_connect();
-            $status = 1;
-            if ( $stmt = $link->prepare(
-                "UPDATE tweet SET status = ?
-                 WHERE id = ? AND usr_id = ?"
-            )) {
-                $stmt->bind_param("iis",$status,$tweet_id,$_SESSION['username']);
-                $stmt->execute();
-            }
-            $stmt->close();
-            $link->close();
-            header("Location: /");
-            exit();
+        $link = $this->db_connect();
+        $status = 1;
+        if ( $stmt = $link->prepare(
+            "UPDATE tweet SET status = ?
+             WHERE id = ? AND usr_id = ?"
+        )) {
+            $stmt->bind_param("iis",$status,$tweet_id,$username);
+            $stmt->execute();
         }
+        $stmt->close();
+        $link->close();
+        header("Location: /");
+        exit();
     }
 }

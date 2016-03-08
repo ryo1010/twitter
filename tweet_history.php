@@ -11,7 +11,10 @@
         'dbuser' => 'akahira',
         'password' => 'akahira',
     );
-$database->setDb_con_info($db_con_info);
+    $database->setDb_con_info($db_con_info);
+
+    $tweet_history_rows
+     = $database->tweet_history($_SESSION['username']);
 
     include 'template/tweet_history_tmp.php';
 ?>
