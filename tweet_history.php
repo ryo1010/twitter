@@ -6,7 +6,7 @@
 </head>
 <body>
 <?
-    require_once("classes/twitter_function.php");
+    require_once("classes/twitter_login.php");
     require_once('classes/twitter_display.php');
 
     $login = new login();
