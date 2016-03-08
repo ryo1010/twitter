@@ -1,3 +1,11 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Twitterもどき</title>
+</head>
+<body>
 <?
     require_once('classes/twitter_login.php');
     require_once('classes/twitter_database.php');
@@ -12,13 +20,6 @@
     );
     $database->setDb_con_info($db_con_info);
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <title>Twitterもどき</title>
-</head>
-<body>
     <h1 class="title">Tweet一覧</h1>
     <div class='username_div'>ユーザ名<?= $_SESSION['username'] ?></div>
     <a href="tweet.php">つぶやく</a>

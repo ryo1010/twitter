@@ -3,6 +3,10 @@
 class Database
 {
     private static $db_con_info;
+    private $content;
+    private $usr_id;
+
+    protected function setContent
 
     public function setDb_con_info($db_con_info){
         self::$db_con_info = $db_con_info;
@@ -205,5 +209,5 @@ class Database
             header("Location: /");
             exit();
         }
-}
+    }
 }

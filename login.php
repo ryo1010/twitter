@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ログイン画面</title>
+</head>
+<body>
 <?php
     require_once("classes/twitter_login.php");
     require_once('classes/twitter_database.php');
@@ -17,13 +23,6 @@
         $database->login();
     }
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>ログイン画面</title>
-</head>
-<body>
-
 <form action="" method="POST">
     <table>
         <tr>
