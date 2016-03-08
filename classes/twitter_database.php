@@ -3,10 +3,6 @@
 class Database
 {
     private static $db_con_info;
-    private $content;
-    private $usr_id;
-
-    protected function setContent
 
     public function setDb_con_info($db_con_info){
         self::$db_con_info = $db_con_info;
@@ -35,7 +31,8 @@ class Database
         $mail_address = $_POST['mail_address'];
         $password = $_POST['password'];
         if ($stmt = $link->prepare(
-            "SELECT * FROM users WHERE usr_mail = ? AND usr_pw = ?")
+            "SELECT * FROM users
+            WHERE usr_mail = ? AND usr_pw = ?")
         ) {
             $stmt->bind_param("ss",$mail_address,$password);
             $stmt->execute();
@@ -63,7 +60,8 @@ class Database
         )){
             $data = "";
             while ( $row = $result->fetch_array() ) {
-                $row['tweettime'] = $this->tweet_diff_check($row['tweettime']);
+                $row['tweettime']
+                = $this->tweet_diff_check($row['tweettime']);
                 $rows[] = $row;
             }
             $result->close();
@@ -81,11 +79,14 @@ class Database
         if ($tweettime_diff < 60) {
             $tweettime_diff = "今さっき";
         } elseif ($tweettime_diff < 3600) {
-            $tweettime_diff = (floor($tweettime_diff / 60 )) . "分前";
+            $tweettime_diff
+             = (floor($tweettime_diff / 60 )) . "分前";
         } elseif ($tweettime_diff < 86400) {
-                $tweettime_diff = (floor($tweettime_diff / 3600 )) . "時間前";
+            $tweettime_diff
+            = (floor($tweettime_diff / 3600 )) . "時間前";
         } elseif ($tweettime_diff > 86400) {
-            $tweettime_diff = date("m月d日",strtotime($tweettime));
+            $tweettime_diff
+            = date("m月d日",strtotime($tweettime));
         }
         return $tweettime_diff;
     }
