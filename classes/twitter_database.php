@@ -2,20 +2,19 @@
 
 class Database
 {
-    private $address = '192.168.56.123';
-    private $db_user_name = 'akahira';
-    private $db_pass = 'akahira';
-    private $db_name = 'twitter';
+    private static $db_con_info;
 
-    
+    public function setDb_con_info($db_con_info){
+        self::$db_con_info = $db_con_info;
+    }
 
     protected function db_connect()
     {
         $link = new mysqli(
-                $this->address,
-                $this->db_user_name,
-                $this->db_pass,
-                $this->db_name
+                self::$db_con_info['host'],
+                self::$db_con_info['dbuser'],
+                self::$db_con_info['password'],
+                self::$db_con_info['dbname']
                 );
         if ($link->connect_error) {
             echo $link->connect_error;
@@ -24,6 +23,29 @@ class Database
             $link->set_charset("utf8");
         }
         return $link;
+    }
+
+    public function login()
+    {
+        $link = $this->db_connect();
+        $mail_address = $_POST['mail_address'];
+        $password = $_POST['password'];
+        if ($stmt = $link->prepare(
+            "SELECT * FROM users WHERE usr_mail = ? AND usr_pw = ?")
+        ) {
+            $stmt->bind_param("ss",$mail_address,$password);
+            $stmt->execute();
+            $stmt->store_result();
+            if($stmt->num_rows == 1){
+                $stmt->bind_result($id,$usr_id,$usr_pw,$usr_mail);
+                while ($stmt->fetch()) {
+                    $_SESSION['username'] = $usr_id;
+                }
+            }
+        }
+        $stmt->close();
+        header('Location: /');
+        exit();
     }
 
     public function tweet_display()
@@ -165,13 +187,15 @@ class Database
     public function tweet_delete()
     {
         if (isset($_POST['tweet_delete'])
-            && isset($_GET['tweet_id'])) {
+            && isset($_GET['tweet_id'])
+        ) {
 
             $tweet_id = $_GET['tweet_id'];
             $link = $this->db_connect();
             $status = 1;
             if ( $stmt = $link->prepare(
-                "UPDATE tweet SET status = ? WHERE id = ? AND usr_id = ?"
+                "UPDATE tweet SET status = ?
+                 WHERE id = ? AND usr_id = ?"
             )) {
                 $stmt->bind_param("iis",$status,$tweet_id,$_SESSION['username']);
                 $stmt->execute();
