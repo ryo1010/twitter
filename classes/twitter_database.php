@@ -32,13 +32,21 @@ class Database
         $password = $_POST['password'];
         if ($stmt = $link->prepare(
             "SELECT * FROM users
-            WHERE usr_mail = ? AND usr_pw = ?")
-        ) {
-            $stmt->bind_param("ss",$mail_address,$password);
+            WHERE usr_mail = ? AND usr_pw = ?"
+        )) {
+            $stmt->bind_param(
+                "ss",
+                $mail_address,$password
+            );
             $stmt->execute();
             $stmt->store_result();
             if($stmt->num_rows == 1){
-                $stmt->bind_result($id,$usr_id,$usr_pw,$usr_mail);
+                $stmt->bind_result(
+                    $id,
+                    $usr_id,
+                    $usr_pw,
+                    $usr_mail
+                );
                 while ($stmt->fetch()) {
                     $_SESSION['username'] = $usr_id;
                 }
@@ -57,7 +65,7 @@ class Database
         if ($result = $link->query(
             "SELECT * FROM tweet WHERE status = $INSERTED OR
              status = $EDIT ORDER BY tweettime DESC"
-        )){
+        )) {
             $data = "";
             while ( $row = $result->fetch_array() ) {
                 $row['tweettime']
@@ -97,11 +105,21 @@ class Database
         if ($stmt = $link->prepare(
             "SELECT * FROM tweet WHERE id = ? AND usr_id = ?"
         )) {
-            $stmt->bind_param('is',$tweet_id,$username);
+            $stmt->bind_param(
+                'is',
+                $tweet_id,
+                $username
+            );
             $stmt->execute();
             $stmt->store_result();
             if ($stmt->num_rows == 1) {
-                $stmt->bind_result($id,$usr_id,$tweettime,$content,$status);
+                $stmt->bind_result(
+                    $id,
+                    $usr_id,
+                    $tweettime,
+                    $content,
+                    $status
+                );
                 $stmt->fetch();
                 $row['usr_id'] = $usr_id;
                 $row['tweettime'] = $tweettime;
@@ -128,9 +146,16 @@ class Database
         $stmt->bind_param('i',$username);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result($id,$usr_id,$tweettime,$content,$status);
+        $stmt->bind_result(
+            $id,
+            $usr_id,
+            $tweettime,
+            $content,
+            $status
+        );
         while ($stmt->fetch() ) {
-            $row['tweettime'] = date("Y年m月d日 h時i分" ,strtotime($tweettime));
+            $row['tweettime']
+            = date("Y年m月d日 h時i分" ,strtotime($tweettime));
             $row['content'] = $content;
             $row['usr_id'] = $usr_id;
             $rows[] = $row;
@@ -194,7 +219,12 @@ class Database
             "UPDATE tweet SET status = ?
              WHERE id = ? AND usr_id = ?"
         )) {
-            $stmt->bind_param("iis",$status,$tweet_id,$username);
+            $stmt->bind_param(
+                "iis",
+                $status,
+                $tweet_id,
+                $username
+            );
             $stmt->execute();
         }
         $stmt->close();
